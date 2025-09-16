@@ -1,0 +1,199 @@
+﻿@using Cardapio.Components.Drawer;
+@using Cardapio.Services
+@inherits LayoutComponentBase
+@inject IJSRuntime JS
+@inject DrawerService DrawerService
+@inject CartService CartService
+@inject NavigationManager Navigation
+@inject ScreenSizeService ScreenSize
+
+<MudThemeProvider Theme="@_theme" />
+<MudDialogProvider />
+
+<MudLayout>
+    <MudAppBar Class="header-bar" Elevation="0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="80" height="60" viewBox="0 0 360 140" role="img" aria-label="Logo PFood com traço">
+            <defs>
+                <linearGradient id="g" x1="0" x2="1">
+                    <stop offset="0" stop-color="#FF4D4F" />
+                    <stop offset="1" stop-color="#E53935" />
+                </linearGradient>
+            </defs>
+
+            <!-- Texto -->
+            <text x="50%" y="65" text-anchor="middle"
+                  font-family="Montserrat, Arial, sans-serif"
+                  font-weight="800"
+                  font-size="72"
+                  fill="url(#g)"
+                  letter-spacing="-3">
+                PFood
+            </text>
+
+            <!-- Traço dinâmico abaixo -->
+            <path d="M90 100 C150 130, 210 130, 270 100"
+                  fill="none"
+                  stroke="url(#g)"
+                  stroke-width="12"
+                  stroke-linecap="round" />
+        </svg>
+
+
+
+        @if (!Navigation.Uri.EndsWith("/Pagamento"))
+        {
+            <MudButton Class=@($"cart-button {(CartService.GetTotalItemsQuantity() > 0 ? "cart-button-red" : "")}") OnClick=@(() => DrawerService.Toggle(IsOpen))>
+                <svg class="cart-button-svg" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M8.14096 8.00024C6.71925 8.00024 5.49276 8.99817 5.20365 10.3902L3.99972 16.1868C3.48396 18.6701 5.37989 21.0002 7.91614 21.0002H16.0839C18.6201 21.0002 20.516 18.6701 20.0003 16.1868L18.7964 10.3902C18.5073 8.99818 17.2808 8.00024 15.8591 8.00024H8.14096Z" stroke="@StrokeColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                    <path d="M15 6V6C15 4.34315 13.6569 3 12 3V3C10.3431 3 9 4.34315 9 6V6" stroke="@StrokeColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+                <MudContainer Class="pa-0 px-2">
+                    <MudText Class=@($"cart-button-value {(CartService.GetTotalItemsQuantity() > 0 ? "cart-button-white-text" : "")}")>@CartService.GetTotalPrice().ToString("C")</MudText>
+                    <MudText Class=@($"cart-button-itens {(CartService.GetTotalItemsQuantity() > 0 ? "cart-button-white-text" : "")}")>@CartService.GetTotalItemsQuantity() @GetCartButtonQuantityString()</MudText>
+                </MudContainer>
+            </MudButton>
+        }
+    </MudAppBar>
+    <MudDrawer @bind-Open="@IsOpen" Anchor="Anchor.End" Elevation="0" OverlayAutoClose="true" Width=@($"{(ScreenSize.GetWidth() <= 768 ? ScreenSize.GetWidth() : 470)}px") Class="cart-drawer" Breakpoint="Breakpoint.None" Variant="@DrawerVariant.Temporary">
+        <Drawer></Drawer>
+    </MudDrawer>
+    <MudMainContent>
+        @Body
+    </MudMainContent>
+</MudLayout>
+
+<style>
+    .header-bar {
+        background-color: #fff;
+        box-shadow: rgb(220, 220, 220) 0px -1px 0px 0px inset;
+        height: 80px;
+        padding: 20px 32px 20px 32px !important;
+        box-sizing: border-box;
+        display: flex;
+        justify-content: center;
+    }
+
+    body {
+        overflow-y: scroll !important;
+    }
+
+    .header-bar-logo {
+        padding: 0px;
+        margin: 4px;
+    }
+
+    .mud-toolbar {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .mud-toolbar {
+        padding: 0px !important;
+    }
+
+    .mud-drawer {
+        margin-top: 80px !important;
+        height: calc(100vh - 80px) !important;
+        top: 80px !important;
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 10px 0px
+    }
+
+    .mud-overlay {
+        top: 80px !important;
+    }
+
+    .mud-overlay-dark {
+        background-color: rgba(33, 33, 33, 0.0) !important;
+        top: 80px !important;
+    }
+
+    .cart-button {
+        height: 44px;
+        min-width: 100px;
+        max-width: 130px;
+        display: flex;
+        border-radius: 200px;
+    }
+
+    .cart-button-red {
+        background-color: rgb(234, 29, 44) !important;
+    }
+
+    .cart-button-white-text {
+        color: #FFF !important;
+    }
+
+    .cart-button-svg {
+        flex-shrink: 0;
+        margin-left: 4px;
+    }
+
+    .cart-button-value {
+        font-size: 0.70rem;
+        text-align: start;
+        color: rgb(113, 113, 113);
+        line-height: 16px;
+    }
+
+    .cart-button-itens {
+        font-size: 0.70rem;
+        text-align: start;
+        color: rgb(113, 113, 113);
+        line-height: 12px
+    }
+
+    .mud-main-content {
+        padding-top: 80px !important;
+    }
+
+</style>
+
+@code {
+
+    private MudTheme? _theme = null;
+    private Boolean IsOpen;
+    private string StrokeColor => CartService.GetTotalItemsQuantity() == 0 ? "#EA1D2C" : "#FFFFFF";
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        CartService.OnChange += StateHasChanged;
+
+        DrawerService.Register(state =>
+        {
+            _ = InvokeAsync(() =>
+            {
+                IsOpen = state;
+                DrawerService.SetState(state);
+                StateHasChanged();
+            });
+        });
+
+        _theme = new()
+            {
+                LayoutProperties = new LayoutProperties()
+            };
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await ScreenSize.InitializeAsync(); // sem parâmetros
+            StateHasChanged();
+        }
+    }
+
+    private string GetCartButtonQuantityString()
+    {
+        if (CartService.GetTotalItemsQuantity() == 0 || CartService.GetTotalItemsQuantity() > 1)
+        {
+            return "Itens";
+        }
+
+        return "Item";
+    }
+}
+
+

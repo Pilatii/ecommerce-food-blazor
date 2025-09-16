@@ -1,0 +1,908 @@
+﻿@page "/"
+@using MudBlazor
+@using Dialog
+@using Cardapio.Entities
+@using Cardapio.Services
+@inject IDialogService DialogService
+@rendermode InteractiveServer
+@inject ScreenSizeService ScreenSize
+
+
+
+<MudContainer MaxWidth="MaxWidth.Large" Class="mt-4 mb-8">
+    @if(Sections == null)
+    {
+        <MudItem xs="12">
+            <MudProgressCircular Indeterminate Color="Color.Primary" Size="Size.Large"></MudProgressCircular>
+            <MudText Class="ml-4">Carregando produtos...</MudText>
+        </MudItem>
+    }
+    else if (!Sections.Any())
+    {
+        <MudItem xs="12">
+            <MudText Typo="Typo.h6">Nenhum produto encontrado.</MudText>
+        </MudItem>
+    }
+    else
+    {
+        foreach(var menuSection in Sections)
+        {
+            <MudItem xs="12">
+                <MudText Class="mb-6 pt-10 menu-section-title" Typo="Typo.h3">
+                    @menuSection.SectionName
+                </MudText>
+            </MudItem>
+            <MudGrid>
+                @if (menuSection.Products == null)
+                {
+                    <MudItem xs="12">
+                        <MudProgressCircular Indeterminate Color="Color.Primary" Size="Size.Large"></MudProgressCircular>
+                        <MudText Class="ml-4">Carregando produtos...</MudText>
+                    </MudItem>
+                }
+                else if (!menuSection.Products.Any())
+                {
+                    <MudItem xs="12">
+                        <MudText Typo="Typo.h6">Nenhum produto encontrado.</MudText>
+                    </MudItem>
+                }
+                else
+                {
+                    @foreach (var product in menuSection.Products)
+                    {
+                        <MudItem xs="12" sm="12" md="6">
+                            <MudCard @onclick="@((e) => OpenDialogAsync(product, menuSection))" Elevation="0" Class="card">
+                                <MudCardContent Class="pa-4">
+                                    <MudStack Row Class="gap-xs-0 gap-sm-1 gap-sm-3" style="height: 100%">
+                                        <MudContainer Class="pa-0 d-flex flex-column">
+                                            <MudContainer class="pa-0 flex-grow-1">
+                                                <MudText Typo="@Typo.h5" Class="product-name">@product.Name</MudText>
+                                                <MudText Typo="@Typo.body2" Class="multiline-ellipsis product-description">@product.Description</MudText>
+                                            </MudContainer>
+                                            <MudText Class="product-price" Typo="@Typo.subtitle1">@product.Price.ToString("C")</MudText>
+                                        </MudContainer>
+                                        <MudImage Src=@product.ImageUrl Class="product-img"></MudImage>
+                                    </MudStack>
+                                </MudCardContent>
+                            </MudCard>
+                        </MudItem>
+                    }
+                }
+            </MudGrid>
+        }
+    }
+
+</MudContainer>
+
+
+<style>
+    .card {
+    height: 205px;
+    width: 100%;
+    border: solid 1px rgb(242, 242, 242);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, .05);
+    }
+
+    .product-img {
+    max-width: 180px;
+    max-height: 180px;
+    object-fit: contain !important;
+    width: auto;
+    height: auto;
+    display: block;
+    }
+
+    .product-name {
+    font-size:1.125rem;
+    font-weight: 400;
+    margin-bottom: 18px
+    }
+
+    .product-description {
+    font-size: 0.830rem;
+    font-weight: 300;
+    color: #717171;
+    }
+
+    .product-price {
+    font-size: 1rem;
+    font-weight: 400;
+    }
+
+    .menu-section-title {
+    font-size:1.5rem;
+    font-weight: 500;
+    letter-spacing: -1px;
+    }
+
+    #no-wasm-warning {
+    display: none;
+    color: #808080;
+    padding: 2rem;
+    text-align: center;
+    font-weight: bold;
+    }
+
+    .multiline-ellipsis {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    display: box;
+    box-orient: vertical;
+    line-clamp: 2;
+    overflow: hidden;
+    }
+
+    .rounded-default {
+    border-radius: 12px !important;
+    -webkit-border-radius: 12px !important; /* Chrome, Safari */
+    -moz-border-radius: 12px !important; /* Firefox antigo */
+    }
+
+</style>
+
+@code {
+    private bool DialogFullScreen = false;
+
+    private Task OpenDialogAsync(Produto produto, MenuSection menuSection)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true, FullScreen = DialogFullScreen };
+
+        var parameters = new DialogParameters<Produto> { { "produto", produto }, { "MenuSection", menuSection } };
+
+        return DialogService.ShowAsync<Dialog>("Simple Dialog", parameters, options);
+    }
+
+    // Mock
+
+    private List<MenuSection> Sections { get; set; } = new();
+
+    protected override Task OnInitializedAsync()
+    {
+        DialogFullScreen = ScreenSize.GetWidth() >= 768;
+
+        Sections = new List<MenuSection>
+        {
+            new MenuSection
+            {
+                SectionName = "Sobre Coxa Desossada",
+                Products = new List<Produto>
+                {
+                    new Produto
+                    {
+                        Name = "Sobre Coxa Desossada Pote G",
+                        Description = "Acompanha batata ou polenta frita + 3 molhos deliciosos a sua escolha. Serve 5 a 6 pessoas.",
+                        Price = 99.90m,
+                        ImageUrl = "https://dummyimage.com/600x400/000/fff&text=Item+1",
+                        Extras = new List<Extra>
+                        {
+                            new Extra
+                            {
+                                Name = "Acompanhamento",
+                                Quantity = 1,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Batata frita", Url = "https://dummyimage.com/600x400/000/fff&text=Batata" },
+                                    new ExtrasOption { Name = "Polenta frita", Url = "https://dummyimage.com/600x400/000/fff&text=Polenta" },
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Molhos",
+                                Quantity = 3,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Maionese Especial", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Rosê", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg" },
+                                    new ExtrasOption { Name = "Mostarda e Mel", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg" },
+                                    new ExtrasOption { Name = "Barbecue", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Cheddar", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Ketchup", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Tocino", Description = "Bacon", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Picante", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Alho", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg" }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Molhos Extra",
+                                Quantity = 6,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Maionese Especial", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho Rosê", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Mostarda e Mel", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Barbecue", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho Cheddar", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho de Ketchup", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho Tocino", Description = "Bacon", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho Picante", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho de Alho", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg", Price = 3m }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Porções",
+                                Quantity = 4,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Batata Frita", Description = "450g", Url = "https://dummyimage.com/600x400/000/fff&text=Batata", Price = 14m },
+                                    new ExtrasOption { Name = "Polenta Frita", Description = "450g", Url = "https://dummyimage.com/600x400/000/fff&text=Polenta", Price = 19m },
+                                    new ExtrasOption { Name = "Bolinhas de queijo", Description = "Bolinhas de queijo empanado. 300g.", Url = "https://dummyimage.com/600x400/000/fff&text=Bolinha+Queijo", Price = 29.90m },
+                                    new ExtrasOption { Name = "Mini Churros", Description = "300g de mini churros, recheado com doce de leite. Acompanha um pote de doce de leite.", Url = "https://dummyimage.com/600x400/000/fff&text=Churros", Price = 17.90m }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Bebidas",
+                                Quantity = 3,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Coca Cola Lata 350ml", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051711_JLfL_.jpeg", Price = 5m },
+                                    new ExtrasOption { Name = "Coca Cola 2 litros", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051713_UNXF_.jpeg", Price = 12.90m },
+                                    new ExtrasOption { Name = "Fruki Guaraná 2 litros", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051722_REMJ_.jpeg", Price = 10m },
+                                    new ExtrasOption { Name = "Cerveja Brahma Lata 473ml", Description = "Produto para maiores de 18 anos", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202210190038_reic8dnbo7m.jpg", Price = 7.99m },
+                                    new ExtrasOption { Name = "Cerveja Schin Pilsen Lata 473ml", Description = "Produto para maiores de 18 anos", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202210180004_qbgc1cixqkc.jpg", Price = 4.29m }
+                                }
+                            }
+                        }
+                    },
+                    new Produto
+                    {
+                        Name = "Sobre Coxa Desossada Pote M",
+                        Description = "Acompanha batata ou polenta frita + 3 molhos deliciosos a sua escolha. Serve 3 a 4 pessoas.",
+                        Price = 79.90m,
+                        ImageUrl = "https://dummyimage.com/600x400/000/fff&text=Item+2",
+                        Extras = new List<Extra>
+                        {
+                            new Extra
+                            {
+                                Name = "Acompanhamento",
+                                Quantity = 1,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Batata frita", Url = "https://dummyimage.com/600x400/000/fff&text=Batata" },
+                                    new ExtrasOption { Name = "Polenta frita", Url = "https://dummyimage.com/600x400/000/fff&text=Polenta" },
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Molhos",
+                                Quantity = 3,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Maionese Especial", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Rosê", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg" },
+                                    new ExtrasOption { Name = "Mostarda e Mel", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg" },
+                                    new ExtrasOption { Name = "Barbecue", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Cheddar", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Ketchup", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Tocino", Description = "Bacon", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Picante", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Alho", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg" }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Molhos Extra",
+                                Quantity = 6,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Maionese Especial", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho Rosê", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Mostarda e Mel", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Barbecue", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho Cheddar", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho de Ketchup", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho Tocino", Description = "Bacon", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho Picante", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho de Alho", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg", Price = 3m }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Porções",
+                                Quantity = 4,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Batata Frita", Description = "450g", Url = "https://dummyimage.com/600x400/000/fff&text=Batata", Price = 14m },
+                                    new ExtrasOption { Name = "Polenta Frita", Description = "450g", Url = "https://dummyimage.com/600x400/000/fff&text=Polenta", Price = 19m },
+                                    new ExtrasOption { Name = "Bolinhas de queijo", Description = "Bolinhas de queijo empanado. 300g.", Url = "https://dummyimage.com/600x400/000/fff&text=Bolinha+Queijo", Price = 29.90m },
+                                    new ExtrasOption { Name = "Mini Churros", Description = "300g de mini churros, recheado com doce de leite. Acompanha um pote de doce de leite.", Url = "https://dummyimage.com/600x400/000/fff&text=Churros", Price = 17.90m }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Bebidas",
+                                Quantity = 3,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Coca Cola Lata 350ml", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051711_JLfL_.jpeg", Price = 5m },
+                                    new ExtrasOption { Name = "Coca Cola 2 litros", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051713_UNXF_.jpeg", Price = 12.90m },
+                                    new ExtrasOption { Name = "Fruki Guaraná 2 litros", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051722_REMJ_.jpeg", Price = 10m },
+                                    new ExtrasOption { Name = "Cerveja Brahma Lata 473ml", Description = "Produto para maiores de 18 anos", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202210190038_reic8dnbo7m.jpg", Price = 7.99m },
+                                    new ExtrasOption { Name = "Cerveja Schin Pilsen Lata 473ml", Description = "Produto para maiores de 18 anos", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202210180004_qbgc1cixqkc.jpg", Price = 4.29m }
+                                }
+                            }
+                        }
+                    },
+                    new Produto
+                    {
+                        Name = "Sobre Coxa Desossada Pote P",
+                        Description = "Acompanha batata ou polenta frita + 3 molhos deliciosos a sua escolha. Serve 1 a 2 pessoas.",
+                        Price = 51.90m,
+                        ImageUrl = "https://dummyimage.com/600x400/000/fff&text=Item+3",
+                        Extras = new List<Extra>
+                        {
+                            new Extra
+                            {
+                                Name = "Acompanhamento",
+                                Quantity = 1,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Batata frita", Url = "https://dummyimage.com/600x400/000/fff&text=Batata" },
+                                    new ExtrasOption { Name = "Polenta frita", Url = "https://dummyimage.com/600x400/000/fff&text=Polenta" },
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Molhos",
+                                Quantity = 3,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Maionese Especial", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Rosê", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg" },
+                                    new ExtrasOption { Name = "Mostarda e Mel", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg" },
+                                    new ExtrasOption { Name = "Barbecue", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Cheddar", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Ketchup", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Tocino", Description = "Bacon", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Picante", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Alho", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg" }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Molhos Extra",
+                                Quantity = 6,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Maionese Especial", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho Rosê", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Mostarda e Mel", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Barbecue", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho Cheddar", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho de Ketchup", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho Tocino", Description = "Bacon", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho Picante", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg", Price = 3m },
+                                    new ExtrasOption { Name = "Molho de Alho", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg", Price = 3m }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Porções",
+                                Quantity = 4,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Batata Frita", Description = "450g", Url = "https://dummyimage.com/600x400/000/fff&text=Batata", Price = 14m },
+                                    new ExtrasOption { Name = "Polenta Frita", Description = "450g", Url = "https://dummyimage.com/600x400/000/fff&text=Polenta", Price = 19m },
+                                    new ExtrasOption { Name = "Bolinhas de queijo", Description = "Bolinhas de queijo empanado. 300g.", Url = "https://dummyimage.com/600x400/000/fff&text=Bolinha+Queijo", Price = 29.90m },
+                                    new ExtrasOption { Name = "Mini Churros", Description = "300g de mini churros, recheado com doce de leite. Acompanha um pote de doce de leite.", Url = "https://dummyimage.com/600x400/000/fff&text=Churros", Price = 17.90m }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Bebidas",
+                                Quantity = 3,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Coca Cola Lata 350ml", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051711_JLfL_.jpeg", Price = 5m },
+                                    new ExtrasOption { Name = "Coca Cola 2 litros", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051713_UNXF_.jpeg", Price = 12.90m },
+                                    new ExtrasOption { Name = "Fruki Guaraná 2 litros", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051722_REMJ_.jpeg", Price = 10m },
+                                    new ExtrasOption { Name = "Cerveja Brahma Lata 473ml", Description = "Produto para maiores de 18 anos", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202210190038_reic8dnbo7m.jpg", Price = 7.99m },
+                                    new ExtrasOption { Name = "Cerveja Schin Pilsen Lata 473ml", Description = "Produto para maiores de 18 anos", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202210180004_qbgc1cixqkc.jpg", Price = 4.29m }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            new MenuSection
+            {
+                SectionName = "Bah tchê! Batatão recheado!",
+                Products = new List<Produto>
+                {
+                    new Produto
+                    {
+                        Name = "Batatão recheado",
+                        Description = "Batatão recheado com frango, bacon e muito queijo! Podendo escolher entre cheddar, Catupiry ou os dois!",
+                        Price = 40.90m,
+                        ImageUrl = "https://dummyimage.com/600x400/000/fff&text=Item+4",
+                        Extras = new List<Extra>
+                        {
+                            new Extra
+                            {
+                                Name = "Queijo",
+                                Quantity = 2,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Cheddar", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202208101457_T868_i.jpg" },
+                                    new ExtrasOption { Name = "Catupiry", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202208101503_2YC2_i.jpg" },
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Queijo Extra",
+                                Quantity = 2,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Queijo cheddar", Description="Turbine o seu batatão com mais quantidade de queijo cheddar!", Price= 5.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202208101457_T868_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Rosê", Description="Turbine o seu batatão com mais quantidade de Catupiry!", Price= 5.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202208101503_2YC2_i.jpg" }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            new MenuSection
+{
+                SectionName = "Espetinho de Frango com Queijo",
+                Products = new List<Produto>
+                {
+                    new Produto
+                    {
+                        Name = "Espetinho de Frango com Queijo M",
+                        Description = "São 4 Espetinhos de Frango com Queijo.",
+                        Price = 25.94m,
+                        ImageUrl = "https://dummyimage.com/600x400/000/fff&text=Item+5",
+                        Extras = new List<Extra>
+                        {
+                            new Extra
+                            {
+                                Name = "Molhos",
+                                Quantity = 2,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Maionese Especial", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Rosê", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg" },
+                                    new ExtrasOption { Name = "Mostarda e Mel", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg" },
+                                    new ExtrasOption { Name = "Barbecue", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Cheddar", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Ketchup", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Tocino", Description = "Bacon", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Picante", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Alho", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202111300025_IMBG_i.jpg" }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Molho Extra",
+                                Quantity = 6,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Maionese Especial", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Rosê", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg" },
+                                    new ExtrasOption { Name = "Mostarda e Mel", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg" },
+                                    new ExtrasOption { Name = "Barbecue", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Cheddar", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Ketchup", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Tocino", Description = "Bacon", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Picante", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Alho", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202111300025_IMBG_i.jpg" }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Porções",
+                                Quantity = 4,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Batata Frita", Description = "450g", Url = "https://dummyimage.com/600x400/000/fff&text=Batata", Price = 14m },
+                                    new ExtrasOption { Name = "Polenta Frita", Description = "450g", Url = "https://dummyimage.com/600x400/000/fff&text=Polenta", Price = 19m },
+                                    new ExtrasOption { Name = "Bolinhas de queijo", Description = "Bolinhas de queijo empanado. 300g.", Url = "https://dummyimage.com/600x400/000/fff&text=Bolinha+Queijo", Price = 29.90m },
+                                    new ExtrasOption { Name = "Mini Churros", Description = "300g de mini churros, recheado com doce de leite. Acompanha um pote de doce de leite.", Url = "https://dummyimage.com/600x400/000/fff&text=Churros", Price = 17.90m }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Bebidas",
+                                Quantity = 3,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Coca Cola Lata", Price = 5.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051711_JLfL_.jpeg" },
+                                    new ExtrasOption { Name = "Coca Cola 2 litros", Price = 12.90m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051713_UNXF_.jpeg" },
+                                    new ExtrasOption { Name = "Fruki Guaraná 2 litros", Price = 10.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051722_REMJ_.jpeg" },
+                                    new ExtrasOption { Name = "Refrigerante Limoneto H2oh 500ml", Description = "Garrafa 500ml", Price = 7.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202303161156_0ddpiwg464r9.jpg" },
+                                    new ExtrasOption { Name = "Refrigerante H2oh 500ml Limão", Description = "Garrafa 500ml", Price = 6.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202503110814_mbw8hzwspkg.jpeg" },
+                                    new ExtrasOption { Name = "Agua com gás 500 ml", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202110232133_ojf2_d.jpg" }
+                                }
+                            }
+                        }
+                    },
+                    new Produto
+                    {
+                        Name = "Espetinho de Frango com Queijo P",
+                        Description = "São 2 Espetinhos de Frango com Queijo.",
+                        Price = 10.45m,
+                        ImageUrl = "https://dummyimage.com/600x400/000/fff&text=Item+6",
+                        Extras = new List<Extra>
+                        {
+                            new Extra
+                            {
+                                Name = "Molhos",
+                                Quantity = 2,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Maionese Especial", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Rosê", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg" },
+                                    new ExtrasOption { Name = "Mostarda e Mel", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg" },
+                                    new ExtrasOption { Name = "Barbecue", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg" },
+                                    new ExtrasOption { Name = "Melho Cheddar", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Ketchup", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Tocino", Description = "Bacon", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Picante", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Alho", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202111300025_IMBG_i.jpg" }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Molho Extra",
+                                Quantity = 6,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Maionese Especial", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Rosê", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg" },
+                                    new ExtrasOption { Name = "Mostarda e Mel", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg" },
+                                    new ExtrasOption { Name = "Barbecue", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Cheddar", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Ketchup", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Tocino", Description = "Bacon", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Picante", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Alho", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202111300025_IMBG_i.jpg" }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Porções",
+                                Quantity = 4,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Batata Frita", Description = "450g", Url = "https://dummyimage.com/600x400/000/fff&text=Batata", Price = 14m },
+                                    new ExtrasOption { Name = "Polenta Frita", Description = "450g", Url = "https://dummyimage.com/600x400/000/fff&text=Polenta", Price = 19m },
+                                    new ExtrasOption { Name = "Bolinhas de queijo", Description = "Bolinhas de queijo empanado. 300g.", Url = "https://dummyimage.com/600x400/000/fff&text=Bolinha+Queijo", Price = 29.90m },
+                                    new ExtrasOption { Name = "Mini Churros", Description = "300g de mini churros, recheado com doce de leite. Acompanha um pote de doce de leite.", Url = "https://dummyimage.com/600x400/000/fff&text=Churros", Price = 17.90m }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Bebidas",
+                                Quantity = 3,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Coca Cola Lata", Price = 5.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051711_JLfL_.jpeg" },
+                                    new ExtrasOption { Name = "Coca Cola 2 litros", Price = 12.90m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051713_UNXF_.jpeg" },
+                                    new ExtrasOption { Name = "Fruki Guaraná 2 litros", Price = 10.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051722_REMJ_.jpeg" },
+                                    new ExtrasOption { Name = "Refrigerante Limoneto H2oh 500ml", Description = "Garrafa 500ml", Price = 7.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202303161156_0ddpiwg464r9.jpg" },
+                                    new ExtrasOption { Name = "Refrigerante H2oh 500ml Limão", Description = "Garrafa 500ml", Price = 6.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202503110814_mbw8hzwspkg.jpeg" },
+                                    new ExtrasOption { Name = "Agua com gás 500 ml", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202110232133_ojf2_d.jpg" }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            new MenuSection
+            {
+                SectionName = "Combos",
+                Products = new List<Produto>
+                {
+                    new Produto
+                    {
+                        Name = "Combo Família M",
+                        Description = "Acompanha batata ou polenta frita + 3 molhos deliciosos a sua escolha + 1 Guaraná 2 litros + 3km de tele grátis. Serve 3 a 4 pessoas. (Aprox. 1kg)",
+                        Price = 72.81m,
+                        ImageUrl = "https://dummyimage.com/600x400/000/fff&text=Combo+1",
+                        Extras = new List<Extra>
+                        {
+                            new Extra
+                            {
+                                Name = "Acompanhamento",
+                                Quantity = 1,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Batata frita", Url = "https://dummyimage.com/600x400/000/fff&text=Batata" },
+                                    new ExtrasOption { Name = "Polenta frita", Url = "https://dummyimage.com/600x400/000/fff&text=Polenta" },
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Molhos",
+                                Quantity = 3,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Maionese Especial", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Rosê", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg" },
+                                    new ExtrasOption { Name = "Mostarda e Mel", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg" },
+                                    new ExtrasOption { Name = "Barbecue", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Cheddar", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Ketchup", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Tocino", Description = "Bacon", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Picante", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Alho", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg" }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Molho Extra",
+                                Quantity = 6,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Maionese Especial", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Rosê", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg" },
+                                    new ExtrasOption { Name = "Mostarda e Mel", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg" },
+                                    new ExtrasOption { Name = "Barbecue", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Cheddar", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Ketchup", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Tocino", Description = "Bacon", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Picante", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Alho", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg" }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Porções",
+                                Quantity = 4,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Batata Frita", Description = "450g", Url = "https://dummyimage.com/600x400/000/fff&text=Batata", Price = 14m },
+                                    new ExtrasOption { Name = "Polenta Frita", Description = "450g", Url = "https://dummyimage.com/600x400/000/fff&text=Polenta", Price = 19m },
+                                    new ExtrasOption { Name = "Bolinhas de queijo", Description = "Bolinhas de queijo empanado. 300g.", Url = "https://dummyimage.com/600x400/000/fff&text=Bolinha+Queijo", Price = 29.90m },
+                                    new ExtrasOption { Name = "Mini Churros", Description = "300g de mini churros, recheado com doce de leite. Acompanha um pote de doce de leite.", Url = "https://dummyimage.com/600x400/000/fff&text=Churros", Price = 17.90m }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Refrigerante",
+                                Quantity = 1,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Guaraná Fruki 2 L", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051722_REMJ_.jpeg" },
+                                    new ExtrasOption { Name = "Coca Cola 2 L", Price = 5.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051713_UNXF_.jpeg" }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Bebidas",
+                                Quantity = 3,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Coca Cola Lata", Price = 5.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051711_JLfL_.jpeg" },
+                                    new ExtrasOption { Name = "Coca Cola 2 litros", Price = 12.90m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051713_UNXF_.jpeg" },
+                                    new ExtrasOption { Name = "Fruki Guaraná", Price = 10.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051722_REMJ_.jpeg" }
+                                }
+                            }
+                        }
+                    },
+                    new Produto
+                    {
+                        Name = "Combo Família G",
+                        Description = "1 Frango no Pote G de 1,5kg Suculento + Batata frita + Porção extra de 450g de batata ou polenta + 1 Guaraná 2 L + 4 Molhos Deliciosos a sua escolha + tele grátis até 3 km.",
+                        Price = 112.90m,
+                        ImageUrl = "https://dummyimage.com/600x400/000/fff&text=Combo+2",
+                        Extras = new List<Extra>
+                        {
+                            new Extra
+                            {
+                                Name = "Acompanhamento",
+                                Quantity = 1,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Batata frita", Url = "https://dummyimage.com/600x400/000/fff&text=Batata" },
+                                    new ExtrasOption { Name = "Polenta frita", Url = "https://dummyimage.com/600x400/000/fff&text=Polenta" },
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Molhos",
+                                Quantity = 3,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Maionese Especial", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Rosê", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg" },
+                                    new ExtrasOption { Name = "Mostarda e Mel", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg" },
+                                    new ExtrasOption { Name = "Barbecue", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Cheddar", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Ketchup", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Tocino", Description = "Bacon", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Picante", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Alho", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg" }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Molho Extra",
+                                Quantity = 6,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Maionese Especial", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Rosê", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg" },
+                                    new ExtrasOption { Name = "Mostarda e Mel", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg" },
+                                    new ExtrasOption { Name = "Barbecue", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Cheddar", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Ketchup", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Tocino", Description = "Bacon", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Picante", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Alho", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg" }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Porções",
+                                Quantity = 4,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Batata Frita", Description = "450g", Url = "https://dummyimage.com/600x400/000/fff&text=Batata", Price = 14m },
+                                    new ExtrasOption { Name = "Polenta Frita", Description = "450g", Url = "https://dummyimage.com/600x400/000/fff&text=Polenta", Price = 19m },
+                                    new ExtrasOption { Name = "Bolinhas de queijo", Description = "Bolinhas de queijo empanado. 300g.", Url = "https://dummyimage.com/600x400/000/fff&text=Bolinha+Queijo", Price = 29.90m },
+                                    new ExtrasOption { Name = "Mini Churros", Description = "300g de mini churros, recheado com doce de leite. Acompanha um pote de doce de leite.", Url = "https://dummyimage.com/600x400/000/fff&text=Churros", Price = 17.90m }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Refrigerante",
+                                Quantity = 1,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Guaraná Fruki 2 L", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051722_REMJ_.jpeg" },
+                                    new ExtrasOption { Name = "Coca Cola 2 L", Price = 5.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051713_UNXF_.jpeg" }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Bebidas",
+                                Quantity = 3,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Coca Cola Lata", Price = 5.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051711_JLfL_.jpeg" },
+                                    new ExtrasOption { Name = "Coca Cola 2 litros", Price = 12.90m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051713_UNXF_.jpeg" },
+                                    new ExtrasOption { Name = "Fruki Guaraná", Price = 10.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051722_REMJ_.jpeg" }
+                                }
+                            }
+                        }
+                    },
+                    new Produto
+                    {
+                        Name = "Combo Big Família",
+                        Description = "1 Frango no Pote G de 1,5kg Suculento + Batata frita + Porção extra de 450g de batata ou polenta + Porção Extra de Anel de Cebola ou Mini churros + 1 Guaraná 2 L + 4 Molhos Deliciosos a sua escolha + tele grátis até 3 km.",
+                        Price = 114.21m,
+                        ImageUrl = "https://dummyimage.com/600x400/000/fff&text=Combo+3",
+                        Extras = new List<Extra>
+                        {
+                            new Extra
+                            {
+                                Name = "Acompanhamento",
+                                Quantity = 1,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Batata frita", Url = "https://dummyimage.com/600x400/000/fff&text=Batata" },
+                                    new ExtrasOption { Name = "Polenta frita", Url = "https://dummyimage.com/600x400/000/fff&text=Polenta" },
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Molhos",
+                                Quantity = 3,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Maionese Especial", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Rosê", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg" },
+                                    new ExtrasOption { Name = "Mostarda e Mel", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg" },
+                                    new ExtrasOption { Name = "Barbecue", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Cheddar", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Ketchup", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Tocino", Description = "Bacon", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Picante", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Alho", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg" }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Molho Extra",
+                                Quantity = 6,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Maionese Especial", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Rosê", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg" },
+                                    new ExtrasOption { Name = "Mostarda e Mel", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg" },
+                                    new ExtrasOption { Name = "Barbecue", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Cheddar", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Ketchup", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Tocino", Description = "Bacon", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg" },
+                                    new ExtrasOption { Name = "Molho Picante", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg" },
+                                    new ExtrasOption { Name = "Molho de Alho", Price = 3.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg" }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Porções",
+                                Quantity = 4,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Batata Frita", Description = "450g", Url = "https://dummyimage.com/600x400/000/fff&text=Batata", Price = 14m },
+                                    new ExtrasOption { Name = "Polenta Frita", Description = "450g", Url = "https://dummyimage.com/600x400/000/fff&text=Polenta", Price = 19m },
+                                    new ExtrasOption { Name = "Bolinhas de queijo", Description = "Bolinhas de queijo empanado. 300g.", Url = "https://dummyimage.com/600x400/000/fff&text=Bolinha+Queijo", Price = 29.90m },
+                                    new ExtrasOption { Name = "Mini Churros", Description = "300g de mini churros, recheado com doce de leite. Acompanha um pote de doce de leite.", Url = "https://dummyimage.com/600x400/000/fff&text=Churros", Price = 17.90m }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Refrigerante",
+                                Quantity = 1,
+                                Required = true,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Guaraná Fruki 2 L", Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051722_REMJ_.jpeg" },
+                                    new ExtrasOption { Name = "Coca Cola 2 L", Price = 5.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051713_UNXF_.jpeg" }
+                                }
+                            },
+                            new Extra
+                            {
+                                Name = "Bebidas",
+                                Quantity = 3,
+                                Required = false,
+                                Options = new List<ExtrasOption>
+                                {
+                                    new ExtrasOption { Name = "Coca Cola Lata", Price = 5.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051711_JLfL_.jpeg" },
+                                    new ExtrasOption { Name = "Coca Cola 2 litros", Price = 12.90m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051713_UNXF_.jpeg" },
+                                    new ExtrasOption { Name = "Fruki Guaraná", Price = 10.00m, Url = "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051722_REMJ_.jpeg" }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        return Task.CompletedTask;
+    }
+}

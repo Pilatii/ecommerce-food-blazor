@@ -1,0 +1,575 @@
+[
+  {
+    "Name": "Sobre Coxa Desossada Pote G",
+    "Description": "Acompanha batata ou polenta frita + 3 molhos deliciosos a sua escolha. Serve 5 a 6 pessoas.",
+    "Price": 99.9,
+    "ImageUrl": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070747_66OG_i.jpg",
+    "Extras": [
+      {
+        "Name": "Acompanhamento",
+        "Quantity": 1,
+        "Required": true,
+        "Options": [
+          {
+            "Name": "Batata frita",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070819_QM08_i.jpg"
+          },
+          {
+            "Name": "Polenta frita",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070820_I6SA_i.jpg"
+          }
+        ]
+      },
+      {
+        "Name": "Molhos",
+        "Quantity": 3,
+        "Required": true,
+        "Options": [
+          {
+            "Name": "Maionese Especial",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg"
+          },
+          {
+            "Name": "Molho Ros�",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg"
+          },
+          {
+            "Name": "Mostarda e Mel",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg"
+          },
+          {
+            "Name": "Barbecue",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg"
+          },
+          {
+            "Name": "Molho Cheddar",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg"
+          },
+          {
+            "Name": "Molho de Ketchup",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg"
+          },
+          {
+            "Name": "Molho Tocino",
+            "Description": "Bacon",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg"
+          },
+          {
+            "Name": "Molho Picante",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg"
+          },
+          {
+            "Name": "Molho de Alho",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg"
+          }
+        ]
+      },
+      {
+        "Name": "Molhos Extra",
+        "Quantity": 6,
+        "Required": false,
+        "Options": [
+          {
+            "Name": "Maionese Especial",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho Ros�",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Mostarda e Mel",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Barbecue",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho Cheddar",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho de Ketchup",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho Tocino",
+            "Description": "Bacon",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho Picante",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho de Alho",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg",
+            "Price": 3
+          }
+        ]
+      },
+      {
+        "Name": "Por��es",
+        "Quantity": 4,
+        "Required": false,
+        "Options": [
+          {
+            "Name": "Batata Frita",
+            "Description": "450g",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070819_QM08_i.jpg",
+            "Price": 14
+          },
+          {
+            "Name": "Polenta Frita",
+            "Description": "450g",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070820_I6SA_i.jpg",
+            "Price": 14
+          },
+          {
+            "Name": "An�is de Cebola",
+            "Description": "21 an�is crocante e deliciosos.",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070817_5E16_i.jpg",
+            "Price": 19
+          },
+          {
+            "Name": "Bolinhas de queijo",
+            "Description": "Bolinhas de queijo empanado. 300g.",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202203161250_DXOX_i.jpg",
+            "Price": 29.9
+          },
+          {
+            "Name": "Mini Churros",
+            "Description": "300g de mini churros, recheado com doce de leite. Acompanha um pote de doce de leite.",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202204091530_6N83_i.jpg",
+            "Price": 17.9
+          }
+        ]
+      },
+      {
+        "Name": "Bebidas",
+        "Quantity": 3,
+        "Required": false,
+        "Options": [
+          {
+            "Name": "Coca Cola Lata 350ml",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051711_JLfL_.jpeg",
+            "Price": 5
+          },
+          {
+            "Name": "Coca Cola 2 litros",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051713_UNXF_.jpeg",
+            "Price": 12.9
+          },
+          {
+            "Name": "Fruki Guaran� 2 litros",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051722_REMJ_.jpeg",
+            "Price": 10
+          },
+          {
+            "Name": "Cerveja Brahma Lata 473ml",
+            "Description": "Produto para maiores de 18 anos",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202210190038_reic8dnbo7m.jpg",
+            "Price": 7.99
+          },
+          {
+            "Name": "Cerveja Schin Pilsen Lata 473ml",
+            "Description": "Produto para maiores de 18 anos",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202210180004_qbgc1cixqkc.jpg",
+            "Price": 4.29
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Sobre Coxa Desossada Pote M",
+    "Description": "Acompanha batata ou polenta frita + 3 molhos deliciosos a sua escolha. Serve 3 a 4 pessoas.",
+    "Price": 79.9,
+    "ImageUrl": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070747_66OG_i.jpg",
+    "Extras": [
+      {
+        "Name": "Acompanhamento",
+        "Quantity": 1,
+        "Required": true,
+        "Options": [
+          {
+            "Name": "Batata frita",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070819_QM08_i.jpg"
+          },
+          {
+            "Name": "Polenta frita",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070820_I6SA_i.jpg"
+          }
+        ]
+      },
+      {
+        "Name": "Molhos",
+        "Quantity": 3,
+        "Required": true,
+        "Options": [
+          {
+            "Name": "Maionese Especial",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg"
+          },
+          {
+            "Name": "Molho Ros�",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg"
+          },
+          {
+            "Name": "Mostarda e Mel",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg"
+          },
+          {
+            "Name": "Barbecue",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg"
+          },
+          {
+            "Name": "Molho Cheddar",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg"
+          },
+          {
+            "Name": "Molho de Ketchup",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg"
+          },
+          {
+            "Name": "Molho Tocino",
+            "Description": "Bacon",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg"
+          },
+          {
+            "Name": "Molho Picante",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg"
+          },
+          {
+            "Name": "Molho de Alho",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg"
+          }
+        ]
+      },
+      {
+        "Name": "Molhos Extra",
+        "Quantity": 6,
+        "Required": false,
+        "Options": [
+          {
+            "Name": "Maionese Especial",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho Ros�",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Mostarda e Mel",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Barbecue",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho Cheddar",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho de Ketchup",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho Tocino",
+            "Description": "Bacon",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho Picante",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho de Alho",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg",
+            "Price": 3
+          }
+        ]
+      },
+      {
+        "Name": "Por��es",
+        "Quantity": 4,
+        "Required": false,
+        "Options": [
+          {
+            "Name": "Batata Frita",
+            "Description": "450g",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070819_QM08_i.jpg",
+            "Price": 14
+          },
+          {
+            "Name": "Polenta Frita",
+            "Description": "450g",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070820_I6SA_i.jpg",
+            "Price": 14
+          },
+          {
+            "Name": "An�is de Cebola",
+            "Description": "21 an�is crocante e deliciosos.",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070817_5E16_i.jpg",
+            "Price": 19
+          },
+          {
+            "Name": "Bolinhas de queijo",
+            "Description": "Bolinhas de queijo empanado. 300g.",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202203161250_DXOX_i.jpg",
+            "Price": 29.9
+          },
+          {
+            "Name": "Mini Churros",
+            "Description": "300g de mini churros, recheado com doce de leite. Acompanha um pote de doce de leite.",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202204091530_6N83_i.jpg",
+            "Price": 17.9
+          }
+        ]
+      },
+      {
+        "Name": "Bebidas",
+        "Quantity": 3,
+        "Required": false,
+        "Options": [
+          {
+            "Name": "Coca Cola Lata 350ml",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051711_JLfL_.jpeg",
+            "Price": 5
+          },
+          {
+            "Name": "Coca Cola 2 litros",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051713_UNXF_.jpeg",
+            "Price": 12.9
+          },
+          {
+            "Name": "Fruki Guaran� 2 litros",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051722_REMJ_.jpeg",
+            "Price": 10
+          },
+          {
+            "Name": "Cerveja Brahma Lata 473ml",
+            "Description": "Produto para maiores de 18 anos",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202210190038_reic8dnbo7m.jpg",
+            "Price": 7.99
+          },
+          {
+            "Name": "Cerveja Schin Pilsen Lata 473ml",
+            "Description": "Produto para maiores de 18 anos",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202210180004_qbgc1cixqkc.jpg",
+            "Price": 4.29
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "Name": "Sobre Coxa Desossada Pote P",
+    "Description": "Acompanha batata ou polenta frita + 3 molhos deliciosos a sua escolha. Serve 1 a 2 pessoas.",
+    "Price": 51.9,
+    "ImageUrl": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070747_66OG_i.jpg",
+    "Extras": [
+      {
+        "Name": "Acompanhamento",
+        "Quantity": 1,
+        "Required": true,
+        "Options": [
+          {
+            "Name": "Batata frita",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070819_QM08_i.jpg"
+          },
+          {
+            "Name": "Polenta frita",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070820_I6SA_i.jpg"
+          }
+        ]
+      },
+      {
+        "Name": "Molhos",
+        "Quantity": 3,
+        "Required": true,
+        "Options": [
+          {
+            "Name": "Maionese Especial",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg"
+          },
+          {
+            "Name": "Molho Ros�",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg"
+          },
+          {
+            "Name": "Mostarda e Mel",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg"
+          },
+          {
+            "Name": "Barbecue",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg"
+          },
+          {
+            "Name": "Molho Cheddar",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg"
+          },
+          {
+            "Name": "Molho de Ketchup",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg"
+          },
+          {
+            "Name": "Molho Tocino",
+            "Description": "Bacon",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg"
+          },
+          {
+            "Name": "Molho Picante",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg"
+          },
+          {
+            "Name": "Molho de Alho",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg"
+          }
+        ]
+      },
+      {
+        "Name": "Molhos Extra",
+        "Quantity": 6,
+        "Required": false,
+        "Options": [
+          {
+            "Name": "Maionese Especial",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_2S0I_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho Ros�",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070821_OAKS_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Mostarda e Mel",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_2SDQ_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Barbecue",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070822_M6DR_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho Cheddar",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070823_S32U_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho de Ketchup",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202208261012_YLQ7_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho Tocino",
+            "Description": "Bacon",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_32S8_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho Picante",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070828_D0R4_i.jpg",
+            "Price": 3
+          },
+          {
+            "Name": "Molho de Alho",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070824_3682_i.jpg",
+            "Price": 3
+          }
+        ]
+      },
+      {
+        "Name": "Por��es",
+        "Quantity": 4,
+        "Required": false,
+        "Options": [
+          {
+            "Name": "Batata Frita",
+            "Description": "450g",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070819_QM08_i.jpg",
+            "Price": 14
+          },
+          {
+            "Name": "Polenta Frita",
+            "Description": "450g",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070820_I6SA_i.jpg",
+            "Price": 14
+          },
+          {
+            "Name": "An�is de Cebola",
+            "Description": "21 an�is crocante e deliciosos.",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202112070817_5E16_i.jpg",
+            "Price": 19
+          },
+          {
+            "Name": "Bolinhas de queijo",
+            "Description": "Bolinhas de queijo empanado. 300g.",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202203161250_DXOX_i.jpg",
+            "Price": 29.9
+          },
+          {
+            "Name": "Mini Churros",
+            "Description": "300g de mini churros, recheado com doce de leite. Acompanha um pote de doce de leite.",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/8003021f-9b5f-4577-b750-f5394640dbaa/202204091530_6N83_i.jpg",
+            "Price": 17.9
+          }
+        ]
+      },
+      {
+        "Name": "Bebidas",
+        "Quantity": 3,
+        "Required": false,
+        "Options": [
+          {
+            "Name": "Coca Cola Lata 350ml",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051711_JLfL_.jpeg",
+            "Price": 5
+          },
+          {
+            "Name": "Coca Cola 2 litros",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051713_UNXF_.jpeg",
+            "Price": 12.9
+          },
+          {
+            "Name": "Fruki Guaran� 2 litros",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/3a109c08-3d36-46d0-9e9d-b69c84bf16a9/202102051722_REMJ_.jpeg",
+            "Price": 10
+          },
+          {
+            "Name": "Cerveja Brahma Lata 473ml",
+            "Description": "Produto para maiores de 18 anos",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202210190038_reic8dnbo7m.jpg",
+            "Price": 7.99
+          },
+          {
+            "Name": "Cerveja Schin Pilsen Lata 473ml",
+            "Description": "Produto para maiores de 18 anos",
+            "Url": "https://static.ifood-static.com.br/image/upload/t_medium/pratos/820af392-002c-47b1-bfae-d7ef31743c7f/202210180004_qbgc1cixqkc.jpg",
+            "Price": 4.29
+          }
+        ]
+      }
+    ]
+  }
+]

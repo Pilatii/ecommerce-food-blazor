@@ -1,0 +1,148 @@
+﻿@using Cardapio.Services
+@inject PaymentService PaymentService
+
+<MudContainer Class="pa-0 mt-10">
+    <MudText Class="delivery-card-title mb-4">
+        Hoje, 65-75 min
+    </MudText>
+    <MudContainer Class="pa-0 delivery-card px-6 py-3">
+        <MudText Class="delivery-card-small-red">Padrão</MudText>
+        <MudText Class="delivery-card-text">Hoje, 65-75 min</MudText>
+        <MudText Class="delivery-card-bold">R$ 9,99</MudText>
+    </MudContainer>
+    <MudTabs MinimumTabWidth="40px" Class="mt-10">
+        <MudTabPanel Text="Pague pelo site">
+            <MudButton Class="mt-10 px-5 py-6 delivery-card" FullWidth>
+                <MudImage Class="mr-5" Width="25" Height="25" Src="https://static.ifood-static.com.br/image/upload/t_thumbnail/icones/payments/brands/3dc38545-6c1b-43a0-a2d0-dd2e1ac3bc73"></MudImage>
+                <MudContainer Class="pa-0 pix-info">
+                    <MudText Class="pix-info-bold">Pague com Pix</MudText>
+                    <MudText Class="pix-info-gray">Use o QR Code ou copie e cole o código</MudText>
+                </MudContainer>
+            </MudButton>
+        </MudTabPanel>
+        @if(PayOnDelivery)
+        {
+            <MudTabPanel Text="Pague na entrega">
+                <MudToggleGroup Class="two-column-toggle mt-8" @bind-Value="PaymentOption" T="string" Outlined=false SelectionMode="SelectionMode.SingleSelection" Vertical=true CheckMark=true>
+                    @foreach(var option in PaymentService.GetPaymentOptions())
+                    {
+                        <MudToggleItem Class="toggle-item pa-5" Value="@(option.Name)">
+                            <MudImage Class="payment-img" Src=@(option.IconSrc)></MudImage>
+                            <MudText Class="payment-text">@option.Name</MudText>
+                        </MudToggleItem>
+                    }
+                </MudToggleGroup>
+            </MudTabPanel>
+        }
+    </MudTabs>
+</MudContainer>
+
+<style>
+    .delivery-card-title {
+        font-size: 1.125rem;
+        font-weight: 500;
+        color: #3e3e3e;
+    }
+
+    .delivery-card {
+        border: 1px solid #ea1d2c;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px
+    }
+
+    .delivery-card-small-red {
+        color: #ea1d2c;
+        font-weight: 300;
+        font-size: .75rem;
+    }
+
+    .delivery-card-text {
+        color: #717171;
+        font-weight: 300;
+        font-size: .875rem;
+    }
+
+    .delivery-card-bold {
+        font-size: .875rem;
+        font-weight: 500;
+        color: #3e3e3e;
+    }
+
+    .pix-info p {
+        text-align: start
+        
+    }
+
+    .pix-info-bold {
+        font-size: 1rem;
+        color: #3e3e3e;
+    }
+
+    .pix-info-gray {
+        font-size: 1rem;
+        color: #a6a6a6;
+
+    }
+
+    .two-column-toggle {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .toggle-item {
+        flex: 1 1 calc(50% - 10px);
+        display: flex;
+        align-items: center;
+        justify-content: start;
+        gap: 10px;
+        padding: 10px;
+        margin-bottom: 8px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px !important;
+        background-color: transparent;
+        transition: all 0.3s ease;
+    }
+
+    .toggle-item:hover {
+        background-color: rgb(215, 236, 223) !important;
+    }
+
+    .payment-img {
+        max-height: 24px;
+        max-width: 24px;
+        object-fit: contain !important;
+        margin-right: 14px;
+    }
+
+    .payment-text {
+        font-size: .875rem;
+        font-weight: 300;
+        color: #3e3e3e;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .mud-button-filled {
+        background-color: rgb(215, 236, 223) !important;
+    }
+
+    .mud-toggle-item-check-icon {
+        color: #50a773;
+    }
+
+    .toggle-item .mud-toggle-item-check-icon {
+        margin-left: auto; 
+        order: 99;
+    }
+</style>
+
+@code {
+    [Parameter]
+    public bool PayOnDelivery { get; set; } = true;
+
+    private string PaymentOption { get; set; } = string.Empty;
+}

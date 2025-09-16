@@ -1,0 +1,121 @@
+﻿@using Cardapio.Entities
+
+<MudContainer Class=@($"plus-minus-button-container ma-0 pa-0 {(PartialHidden ? "hidden-border" : "")}")>
+    <MudButton @onclick="Minus" Class="@($"plus-minus-button pa-0 {(Counter == CounterStartValue ? "transparent-button" : "")} {(PartialHiddenValeu ? "partial-hidden" : "")}")" Ripple="false">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+            <path fill="#EA1D2C" fill-rule="evenodd" d="M17.993 11c.556 0 1.007.444 1.007 1 0 .552-.45 1-1.007 1H6.007A1.001 1.001 0 0 1 5 12c0-.552.45-1 1.007-1h11.986z"></path>
+        </svg>
+    </MudButton>
+    <MudText Class=@($"{(PartialHiddenValeu ? "partial-hidden" : "")}") Style="flex:1; text-align: center; font-weight: 700">@Counter</MudText>
+    <MudButton @onclick="Plus" Class="@($"plus-minus-button pa-0 {(AvailableSelections == 0 ? "transparent-button" : "")}")" Ripple="false">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24">
+            <path fill="#EA1D2C" fill-rule="evenodd" d="M13 11h4.993c.556 0 1.007.444 1.007 1 0 .552-.45 1-1.007 1H13v4.993C13 18.55 12.556 19 12 19c-.552 0-1-.45-1-1.007V13H6.007A1.001 1.001 0 0 1 5 12c0-.552.45-1 1.007-1H11V6.007C11 5.45 11.444 5 12 5c.552 0 1 .45 1 1.007V11z"></path>
+        </svg>
+    </MudButton>
+</MudContainer>
+
+<style>
+    .plus-minus-button-container  {
+    display: flex;
+    align-items: center;
+
+    max-width: 115px;
+    max-height: 48px;
+    width: 100%;
+    height: 100%;
+    border: solid 1px rgb(220, 220, 220);
+    border-radius: 4px;
+    }
+
+    .plus-minus-button {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+
+    }
+
+    .plus-minus-button:hover {
+    background-color: #fff
+    }
+
+    .transparent-button {
+    opacity: 0.5 !important;
+    }
+
+    .partial-hidden {
+    visibility: hidden;
+    border:  none;
+    }
+
+    .hidden-border {
+    border-color: #fff !important;
+    }
+
+</style>
+
+@code {
+    [Parameter]
+    public EventCallback<int> OnCounterChange { get; set; }
+
+    [Parameter]
+    public int CounterStartValue { get; set; }
+
+    [Parameter]
+    public Boolean PartialHidden { get; set; } = false;
+
+    [Parameter]
+    public int AvailableSelections { get; set; } = 100;
+
+
+    [Parameter]
+    public int CounterMinValeu { get; set; } = 0;
+
+
+    protected override void OnInitialized()
+    {
+        Counter = CounterStartValue;
+
+        if (CounterStartValue > 0)
+        {
+            PartialHiddenValeu = false;
+        }
+        else if (PartialHidden)
+        {
+            PartialHiddenValeu = PartialHidden;
+        }
+    }
+
+    private int Counter { get; set; }
+    private Boolean PartialHiddenValeu { get; set; }
+
+    private async Task Plus()
+    {
+
+        if (AvailableSelections > 0)
+        {
+            Counter++;
+
+            if (Counter > CounterStartValue && PartialHiddenValeu)
+            {
+                PartialHiddenValeu = false;
+            }
+
+            await OnCounterChange.InvokeAsync(Counter);
+        }
+    }
+
+    private async Task Minus()
+    {
+        if (Counter > CounterMinValeu)
+        {
+            Counter--;
+
+            if (Counter == 0 && PartialHidden)
+            {
+                PartialHiddenValeu = true;
+            }
+
+            await OnCounterChange.InvokeAsync(Counter);
+        }
+    }
+}

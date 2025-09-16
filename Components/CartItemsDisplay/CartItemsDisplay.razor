@@ -1,0 +1,136 @@
+﻿@using Cardapio.Services
+@using Cardapio.Entities
+@using Dialog
+@inject IDialogService DialogService
+@inject CartService CartService
+@inject DrawerService DrawerService
+@inject NavigationManager Navigation
+
+<MudContainer Class="pa-0">
+    <MudContainer Class="pa-0 mb-4">
+        <MudContainer Class="pa-0">
+            <MudText Class="drawer-title">Seu pedido em</MudText>
+            <MudText Class="mt-2" Style="font-size: 1.2rem; font-weight: 400;">PFood Demo</MudText>
+        </MudContainer>
+    </MudContainer>
+    <MudContainer Class="pa-0">
+        @foreach (var group in CartService.GetItems().GroupBy(x => x.MenuSection.SectionName))
+        {
+            <MudText Class="cart-section-name">@group.Key</MudText>
+
+            @foreach (var item in group)
+            {
+                <MudContainer Class="pa-0 py-3 cart-item">
+                    <MudContainer Class="cart-item-description pa-0 my-2">
+                        <MudText Style="font-weight: 500;">@($"{item.Quantity}x {item.Product.Name}")</MudText>
+                        <MudText Style="font-weight: 500;">@item.Price.ToString("C")</MudText>
+                    </MudContainer>
+                    <MudText Class="cart-item-extras">@item.BuildExtrasDescription()</MudText>
+                    <MudText Class="cart-item-extras">@(item.Comment.Length > 0 ? $"Obs: {@item.Comment}" : "")</MudText>
+                    <MudContainer Class="pa-0 cart-item-buttons">
+                        <button @onclick="() => OpenDialogAsync(item.Product, item.MenuSection, item)" class="cart-item-edit-button">Editar</button>
+                        <button @onclick="() => CartService.RemoveItem(item)" class="cart-item-remove-button">Remover</button>
+                    </MudContainer>
+                </MudContainer>
+            }
+        }
+    </MudContainer>
+    <MudContainer Class="pa-0 py-4 cart-footer-info">
+        <MudContainer Class="pa-0 mt-2 cart-footer-info-text">
+            <MudText>Subtotal</MudText>
+            <MudText>@CartService.GetTotalPrice().ToString("C")</MudText>
+        </MudContainer>
+        <MudContainer Class="pa-0 mt-2 cart-footer-info-text">
+            <MudText>Taxa de entrega</MudText>
+            <MudText>R$ 9,99</MudText>
+        </MudContainer>
+    </MudContainer>
+</MudContainer>
+
+<style>
+
+    .drawer-title {
+        font-size: 0.9rem;
+        color: rgb(113, 113, 113);
+        font-weight: 300;
+    }
+
+    .cart-item {
+        border-color: rgb(220, 220, 220);
+        border-top: solid 1px rgb(220, 220, 220);
+    }
+
+    .cart-section-name {
+        font-size: .9rem;
+        font-weight: 500;
+        padding-bottom: 10px;
+        color: #3f3e3e;
+    }
+
+    .cart-item-description {
+        display: flex;
+        justify-content: space-between;
+        color: #3f3e3e;
+    }
+
+        .cart-item-description p {
+            font-size: 0.93rem;
+            font-weight: 400 !important;
+        }
+
+    .cart-item-extras {
+        color: #717171;
+        font-weight: 300;
+        font-size: .83rem;
+    }
+
+    .cart-item-buttons {
+        margin-top: 8px;
+        margin-bottom: 10px;
+        display: flex;
+        gap: 40px;
+    }
+
+    .cart-item-edit-button {
+        color: rgb(234, 29, 44);
+        font-weight: 500;
+    }
+
+    .cart-item-remove-button {
+        color: #a6a29f;
+        font-weight: 500;
+    }
+
+    .cart-footer-info {
+        border-top: solid 1px rgb(220, 220, 220);
+    }
+
+    .cart-footer-info-text {
+        display: flex;
+        justify-content: space-between
+    }
+
+        .cart-footer-info-text p {
+            color: #717171;
+            font-size: .875rem;
+            font-weight: 300;
+        }
+
+</style>
+
+@code {
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        CartService.OnChange += StateHasChanged;
+    }
+
+    private Task OpenDialogAsync(Produto produto, MenuSection menuSection, CartItem item)
+    {
+        var options = new DialogOptions { CloseOnEscapeKey = true };
+
+        var parameters = new DialogParameters<Produto> { { "produto", produto }, { "MenuSection", menuSection }, { "Item", item } };
+
+        return DialogService.ShowAsync<Dialog>("Simple Dialog", parameters, options);
+    }
+}
